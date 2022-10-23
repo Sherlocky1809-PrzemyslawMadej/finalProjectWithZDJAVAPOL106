@@ -1,9 +1,12 @@
 package com.example.conferenceroomreservationsystem.organization;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 class OrganizationService {
@@ -23,8 +26,12 @@ class OrganizationService {
         return organizationRepository.save(organization);
     }
 
-    List<Organization> getOrganizations() {
-        return organizationRepository.findAll();
+    List<Organization> getOrganizations(SortType sortType) {
+        if(sortType != null) {
+            return organizationRepository.findAll(sortType.getSort("name"));
+        } else {
+            return organizationRepository.findAll();
+        }
     }
 
 //    Organization getOrganizationById(Long id){
@@ -50,6 +57,11 @@ class OrganizationService {
                 .orElseThrow(() -> new NoSuchElementException("No organization found!"));
         organizationRepository.delete(organizationToDelete);
         return organizationToDelete;
+    }
+
+    Organization getOrganizationByName(String name) {
+        return organizationRepository.findByName(name)
+                .orElseThrow(() -> new NoSuchElementException("No organization found by name!"));
     }
 
 }

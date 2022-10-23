@@ -1,5 +1,6 @@
 package com.example.conferenceroomreservationsystem.organization;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/organizations")
@@ -24,8 +26,8 @@ class OrganizationController {
     }
 
     @GetMapping
-    List<Organization> getAllOrganizations() {
-        return organizationService.getOrganizations();
+    List<Organization> getAllOrganizations(@RequestParam(required = false) SortType sortType) {
+        return organizationService.getOrganizations(sortType);
     }
 
 //    @GetMapping("/addOrganization")
@@ -48,8 +50,24 @@ class OrganizationController {
         return organizationService.deleteOrganizationById(id);
     }
 
+    @GetMapping("/{name}")
+    Organization getOrganizationByName(@PathVariable String name) {
+        return organizationService.getOrganizationByName(name);
+    }
+
 //    Obsługa wyjątku - dzięki temu będziemy mieli komunikat dla użytkownika dlaczego wprowadzone nie są
-//    ważne:
+//    ważne: (zrobiony pierwszy punkt zadania CRRS-2.2
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(
             MethodArgumentNotValidException ex) {

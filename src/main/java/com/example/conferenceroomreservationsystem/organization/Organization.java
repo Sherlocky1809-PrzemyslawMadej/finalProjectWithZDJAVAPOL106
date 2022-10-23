@@ -18,7 +18,7 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Can't be null or blank!")
     @Size(min = 2, max = 20)
     private String name;
 
