@@ -1,6 +1,5 @@
 package com.example.conferenceroomreservationsystem.organization;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
@@ -27,9 +26,9 @@ class OrganizationRepositoryTest {
 
     @ParameterizedTest
     @ArgumentsSource(FindByNameArgumentProvider.class)
-    void should_not_return_any_object_when_repo_is_empty_during_find_by_name(List<Organization> organizations,
-                                                                             String orgNameToFind,
-                                                                             boolean exists)
+    void should_return_object_or_not_during_find_by_name(List<Organization> organizations,
+                                                         String orgNameToFind,
+                                                         boolean exists)
     {
         // given
         organizations.forEach(o -> testEntityManager.persist(o));
@@ -41,7 +40,7 @@ class OrganizationRepositoryTest {
 
     @ParameterizedTest
     @ArgumentsSource(SortByNameArgumentProvider.class)
-    void should_be_returned_if_given_list_of_organizations_when_sort_then_sorted_organization(
+    void should_be_returned_sorted_list_of_organizations(
             List<Organization> organizationInDb,
             Sort sortBy,
             List<Organization> expectedSortedOrganizationList

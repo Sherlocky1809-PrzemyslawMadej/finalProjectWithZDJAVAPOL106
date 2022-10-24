@@ -49,7 +49,7 @@ class OrganizationService {
         if(organization.getName() != null) {
             editedOrganization.setName(organization.getName());
         }
-        return editedOrganization;
+        return organizationRepository.save(editedOrganization);
     }
 
     Organization deleteOrganizationById(Long id) {

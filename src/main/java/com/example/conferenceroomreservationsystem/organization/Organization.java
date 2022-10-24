@@ -30,6 +30,11 @@ public class Organization {
         this.name = name;
     }
 
+    public Organization(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

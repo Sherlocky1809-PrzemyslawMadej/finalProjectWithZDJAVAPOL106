@@ -45,8 +45,8 @@ class OrganizationController {
         return organizationService.editOrganization(organization);
     }
 
-    @DeleteMapping
-    Organization deleteOrganization(@PathVariable("/{id}") Long id) {
+    @DeleteMapping("/{id}")
+    Organization deleteOrganization(@PathVariable Long id) {
         return organizationService.deleteOrganizationById(id);
     }
 
