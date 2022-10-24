@@ -134,8 +134,49 @@ class OrganizationServiceTest {
     }
 
     @Test
-    void should_throw_no_such_element_exception_if_organization_not_found() {
+    void should_throw_no_such_element_exception_if_organization_to_update_not_found() {
+        // given
+        Organization organization = new Organization(1L, "test");
+        Mockito.when(organizationRepository.findById(1L)).thenReturn(Optional.empty());
+        // when & then
+        assertThatThrownBy(() -> organizationService.editOrganization(organization))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("No organization to update found!");
+    }
 
+    @Test
+    void should_return_argument_exception_if_given_name_organization_exists() {
+        // given
+        Organization existingOrganization = new Organization(1L, "xxxx");
+        Organization organization = new Organization(1L, "test");
+        Mockito.when(organizationRepository.findById(organization.getId())).thenReturn(Optional.of(existingOrganization));
+        Mockito.when(organizationRepository.findByName(organization.getName())).thenReturn(Optional.of(organization));
+        // when & then
+        assertThatThrownBy(() -> organizationService.editOrganization(organization))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Organization already exists!");
+    }
+
+    @Test
+    void should_find_organization_by_given_name() {
+        // given
+        Organization organization = new Organization(1L, "test");
+        Mockito.when(organizationRepository.findByName(organization.getName())).thenReturn(Optional.of(organization));
+        // when
+        organizationService.getOrganizationByName(organization.getName());
+        // then
+        Mockito.verify(organizationRepository).findByName(organization.getName());
+    }
+
+    @Test
+    void should_throw_no_such_element_exception_if_no_found_organization_by_given_name() {
+        // given
+        Organization organization = new Organization(1L, "test");
+        Mockito.when(organizationRepository.findByName(organization.getName())).thenReturn(Optional.empty());
+        // when & then
+        assertThatThrownBy(() -> organizationService.getOrganizationByName(organization.getName()))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("No organization found by name!");
     }
 
 }
