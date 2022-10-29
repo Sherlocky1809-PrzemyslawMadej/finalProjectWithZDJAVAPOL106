@@ -96,10 +96,9 @@ class OrganizationControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/organizations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
-                                "  \"id\": 0,\n" +
-                                "  \"name\": \"string\"\n" +
+                                "  \"name\": \"test\"\n" +
                                 "}"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", equalTo(1L)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", equalTo(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", equalTo("test")))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 
@@ -139,11 +138,12 @@ class OrganizationControllerTest {
     void should_return_not_found_if_delete_non_exist_organization() throws Exception {
         // given
         Mockito.when(organizationService.deleteOrganizationById(1L))
-                .thenThrow(new NoSuchElementException("Can't find organziation"));
+                .thenThrow(new NoSuchElementException("Can't find organization"));
         // when&then
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/organizations/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo("Can't find organization")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", equalTo("Can't find organization")))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
@@ -153,7 +153,7 @@ class OrganizationControllerTest {
         Mockito.when(organizationService.editOrganization(Mockito.any()))
                 .thenReturn(new Organization(1L, "Amazon"));
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/organizations")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/organizations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "  \"id\": 1,\n" +
