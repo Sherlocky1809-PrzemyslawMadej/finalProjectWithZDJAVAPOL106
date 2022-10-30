@@ -1,15 +1,15 @@
 package com.example.conferenceroomreservationsystem.organization;
 
+import com.example.conferenceroomreservationsystem.conferenceRoom.ConferenceRoom;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +23,9 @@ public class Organization {
     @Size(min = 2, max = 20)
     private String name;
 
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "organization")
+//    private List<ConferenceRoom> bookedRooms;
+
     public Organization() {
     }
 
@@ -34,6 +37,12 @@ public class Organization {
         this.id = id;
         this.name = name;
     }
+
+//    public Organization(Long id, String name, List<ConferenceRoom> bookedRooms) {
+//        this.id = id;
+//        this.name = name;
+//        this.bookedRooms = bookedRooms;
+//    }
 
     public String getName() {
         return name;
@@ -50,6 +59,14 @@ public class Organization {
     public void setId(Long id) {
         this.id = id;
     }
+
+//    public List<ConferenceRoom> getBookedRooms() {
+//        return bookedRooms;
+//    }
+//
+//    public void setBookedRooms(List<ConferenceRoom> bookedRooms) {
+//        this.bookedRooms = bookedRooms;
+//    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,5 +1,6 @@
 package com.example.conferenceroomreservationsystem.organization;
 
+import com.example.conferenceroomreservationsystem.SortType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

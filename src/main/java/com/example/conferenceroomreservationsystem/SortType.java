@@ -1,4 +1,4 @@
-package com.example.conferenceroomreservationsystem.organization;
+package com.example.conferenceroomreservationsystem;
 
 import org.springframework.data.domain.Sort;
 
