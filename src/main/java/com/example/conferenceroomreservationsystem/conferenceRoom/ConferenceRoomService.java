@@ -3,12 +3,12 @@ package com.example.conferenceroomreservationsystem.conferenceRoom;
 import com.example.conferenceroomreservationsystem.SortType;
 import com.example.conferenceroomreservationsystem.organization.Organization;
 import com.example.conferenceroomreservationsystem.organization.OrganizationRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ConferenceRoomService {
@@ -24,14 +24,22 @@ public class ConferenceRoomService {
 
     ConferenceRoom addConferenceRoom(ConferenceRoom conferenceRoom) {
         Organization organization = organizationRepository.findById(conferenceRoom.getOrganization().getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Can't find provided organization!"));
+                .orElseThrow(() -> new IllegalArgumentException("Can't find provided organization!"));
         conferenceRoom.setOrganization(organization);
+        conferenceRoomRepository.findByName(conferenceRoom.getName())
+                .ifPresent(o -> {
+                    throw new IllegalArgumentException("Conference room by given name is already exists!");
+                });
+        if (conferenceRoom.getName() != null) {
+            conferenceRoom.setName(conferenceRoom.getName());
+        }
+
         return conferenceRoomRepository.save(conferenceRoom);
     }
 
     List<ConferenceRoom> getConferenceRoomList() {
-            return conferenceRoomRepository.findAll();
-        }
+        return conferenceRoomRepository.findAll();
+    }
 
     ConferenceRoom editConferenceRoom(ConferenceRoom conferenceRoom) {
 
@@ -58,8 +66,53 @@ public class ConferenceRoomService {
 
     ConferenceRoom deleteConferenceRoom(String id) {
         ConferenceRoom conferenceRoomToDelete = conferenceRoomRepository.findById(id)
-                        .orElseThrow(() -> new NoSuchElementException("No conference room to delete found!"));
+                .orElseThrow(() -> new NoSuchElementException("No conference room to delete found!"));
         conferenceRoomRepository.delete(conferenceRoomToDelete);
         return conferenceRoomToDelete;
+    }
+
+    ConferenceRoom getConferenceRoomById(String id) {
+        return conferenceRoomRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Not found conferenceRoom by given id!"));
+    }
+
+    List<ConferenceRoom> getConferenceRoomsByGivenOrganization(Organization organization, SortType sortType) {
+        List<ConferenceRoom> conferenceRoomsListByOrganization = organization.getBookedRooms();
+
+        return sortListOfConferenceRooms(conferenceRoomsListByOrganization, sortType);
+    }
+
+    List<ConferenceRoom> getConferenceRoomsByAvailability(SortType sortType) {
+        List<ConferenceRoom> allConferenceRooms = getConferenceRoomList();
+        for (ConferenceRoom cr : allConferenceRooms) {
+            cr.setAvailability(cr.getOrganization() == null);
+        }
+                List<ConferenceRoom> filteredConferenceRooms = allConferenceRooms.stream()
+                .filter(ConferenceRoom::getAvailability)
+                .collect(Collectors.toList());
+        return sortListOfConferenceRooms(filteredConferenceRooms, sortType);
+    }
+
+    List<ConferenceRoom> getConferenceRoomsByGivenNumbersOfSeats(Integer seats, SortType sortType) {
+        List<ConferenceRoom> allConferenceRooms = getConferenceRoomList();
+        List<ConferenceRoom> filteredConferenceRoomsBySeats = allConferenceRooms.stream()
+                .filter(cr -> cr.getNumberOfSeats() >= seats)
+                .collect(Collectors.toList());
+        return sortListOfConferenceRooms(filteredConferenceRoomsBySeats, sortType);
+    }
+
+    private static List<ConferenceRoom> sortListOfConferenceRooms(List<ConferenceRoom> conferenceRoomsListToSort,
+                                                                  SortType sortType) {
+        if(sortType == SortType.ASC) {
+            return conferenceRoomsListToSort.stream()
+                    .sorted(Comparator.comparing(ConferenceRoom::getName))
+                    .collect(Collectors.toList());
+        } else if (sortType == SortType.DESC) {
+            return conferenceRoomsListToSort.stream()
+                    .sorted(Comparator.comparing(ConferenceRoom::getName).reversed())
+                    .collect(Collectors.toList());
+        } else {
+            return conferenceRoomsListToSort;
+        }
     }
 }

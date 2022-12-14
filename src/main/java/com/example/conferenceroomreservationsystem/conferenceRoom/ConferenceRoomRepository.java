@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface ConferenceRoomRepository extends JpaRepository<ConferenceRoom, String> {
 
     Optional<ConferenceRoom> findByName(String name);
+
 }

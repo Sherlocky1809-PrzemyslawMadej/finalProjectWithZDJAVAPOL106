@@ -23,8 +23,8 @@ public class Organization {
     @Size(min = 2, max = 20)
     private String name;
 
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "organization")
-//    private List<ConferenceRoom> bookedRooms;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "organization")
+    private List<ConferenceRoom> bookedRooms;
 
     public Organization() {
     }
@@ -60,13 +60,15 @@ public class Organization {
         this.id = id;
     }
 
-//    public List<ConferenceRoom> getBookedRooms() {
-//        return bookedRooms;
-//    }
-//
-//    public void setBookedRooms(List<ConferenceRoom> bookedRooms) {
-//        this.bookedRooms = bookedRooms;
-//    }
+    public List<ConferenceRoom> getBookedRooms() {
+        return bookedRooms;
+    }
+
+    public void setBookedRooms(List<ConferenceRoom> bookedRooms) {
+        this.bookedRooms = bookedRooms;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

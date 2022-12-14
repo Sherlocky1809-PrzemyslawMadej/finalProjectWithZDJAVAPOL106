@@ -20,6 +20,7 @@ public class ConferenceRoom {
     private String id;
 
     @Size(min = 2, max = 20)
+    @NotBlank
     private String name;
 
     @Pattern(regexp = "^\\d\\.\\d{2}$")
@@ -35,7 +36,7 @@ public class ConferenceRoom {
 
     @Min(10)
     @Max(50)
-    private int numberOfSeats;
+    private Integer numberOfSeats;
 
     @ManyToOne
     private Organization organization;
@@ -43,18 +44,18 @@ public class ConferenceRoom {
     public ConferenceRoom() {
     }
 
-    public ConferenceRoom(String id, String name, String identifier,
-                          Integer floor, boolean availability, int numberOfSeats) {
-        this.id = id;
+    public ConferenceRoom(String name, String identifier, Integer floor, Boolean availability,
+                          Integer numberOfSeats, Organization organization) {
         this.name = name;
         this.identifier = identifier;
         this.floor = floor;
         this.availability = availability;
         this.numberOfSeats = numberOfSeats;
+        this.organization = organization;
     }
 
-    public ConferenceRoom(String id, String name, String identifier,
-                          Integer floor, Boolean availability, int numberOfSeats, Organization organization) {
+    public ConferenceRoom(String id, String name, String identifier, Integer floor,
+                          Boolean availability, Integer numberOfSeats, Organization organization) {
         this.id = id;
         this.name = name;
         this.identifier = identifier;
@@ -104,11 +105,11 @@ public class ConferenceRoom {
         this.availability = availability;
     }
 
-    public int getNumberOfSeats() {
+    public Integer getNumberOfSeats() {
         return numberOfSeats;
     }
 
-    public void setNumberOfSeats(int numberOfSeats) {
+    public void setNumberOfSeats(Integer numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
     }
 
@@ -131,5 +132,18 @@ public class ConferenceRoom {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, identifier, floor, availability, numberOfSeats, organization);
+    }
+
+    @Override
+    public String toString() {
+        return "ConferenceRoom{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", identifier='" + identifier + '\'' +
+                ", floor=" + floor +
+                ", availability=" + availability +
+                ", numberOfSeats=" + numberOfSeats +
+                ", organization=" + organization +
+                '}';
     }
 }

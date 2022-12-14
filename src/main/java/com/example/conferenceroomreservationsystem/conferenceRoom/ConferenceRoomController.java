@@ -31,13 +31,18 @@ public class ConferenceRoomController {
     }
 
     @PutMapping
-    ConferenceRoom updateConferenceRoom(@Valid @RequestBody ConferenceRoom conferenceRoom) {
+    ConferenceRoom updateConferenceRoom(@RequestBody ConferenceRoom conferenceRoom) {
         return conferenceRoomService.editConferenceRoom(conferenceRoom);
     }
 
     @DeleteMapping("/{id}")
     ConferenceRoom deleteConferenceRoom(@PathVariable String id) {
         return conferenceRoomService.deleteConferenceRoom(id);
+    }
+
+    @GetMapping("/{id}")
+    ConferenceRoom getConferenceRoomById(@PathVariable String id) {
+        return conferenceRoomService.getConferenceRoomById(id);
     }
 
 }
