@@ -45,4 +45,20 @@ public class ConferenceRoomController {
         return conferenceRoomService.getConferenceRoomById(id);
     }
 
+    @GetMapping("/{name}/{sortType}")
+    List<ConferenceRoom> getConferenceRoomListByOrganizationName(@PathVariable String name,
+                                                                  @PathVariable SortType sortType) {
+        return conferenceRoomService.getConferenceRoomsByGivenOrganization(name, sortType);
+    }
+
+    @GetMapping("/{sortType}")
+    List<ConferenceRoom> getConferenceRoomListSortedByAvailability(@PathVariable SortType sortType) {
+        return conferenceRoomService.getConferenceRoomsByAvailability(sortType);
+    }
+
+    @GetMapping("/{numberOfSeats}/{sortType}")
+    List<ConferenceRoom> getConferenceRoomListByFulfillRequireNumberOfSeats(@PathVariable Integer numberOfSeats,
+                                                                            @PathVariable SortType sortType) {
+        return conferenceRoomService.getConferenceRoomsByGivenNumbersOfSeats(numberOfSeats, sortType);
+    }
 }

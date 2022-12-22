@@ -38,6 +38,7 @@ public class ConferenceRoomService {
     }
 
     List<ConferenceRoom> getConferenceRoomList() {
+
         return conferenceRoomRepository.findAll();
     }
 
@@ -76,7 +77,10 @@ public class ConferenceRoomService {
                 .orElseThrow(() -> new NoSuchElementException("Not found conferenceRoom by given id!"));
     }
 
-    List<ConferenceRoom> getConferenceRoomsByGivenOrganization(Organization organization, SortType sortType) {
+    List<ConferenceRoom> getConferenceRoomsByGivenOrganization(String organizationName, SortType sortType) {
+
+        Organization organization = organizationRepository.findByName(organizationName)
+                .orElseThrow(() -> new IllegalArgumentException("Can't find provided organization!"));
         List<ConferenceRoom> conferenceRoomsListByOrganization = organization.getBookedRooms();
 
         return sortListOfConferenceRooms(conferenceRoomsListByOrganization, sortType);

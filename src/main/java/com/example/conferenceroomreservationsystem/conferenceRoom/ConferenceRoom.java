@@ -44,6 +44,12 @@ public class ConferenceRoom {
     public ConferenceRoom() {
     }
 
+    public ConferenceRoom(String name, Integer floor, Boolean availability) {
+        this.name = name;
+        this.floor = floor;
+        this.availability = availability;
+    }
+
     public ConferenceRoom(String name, String identifier, Integer floor, Boolean availability,
                           Integer numberOfSeats, Organization organization) {
         this.name = name;

@@ -226,6 +226,150 @@ public class ConferenceRoomIntegrationTest {
                         equalTo("Conference room by given name is already exists!")));
     }
 
+    @Test
+    void when_send_get_request_to_return_all_conference_rooms_booked_by_given_organization_should_be_returned_in_asc_direction() throws Exception {
+        //given
+        Organization organization = organizationRepository.save(new Organization("Google"));
+        conferenceRoomRepository.saveAll(
+                Arrays.asList(new ConferenceRoom(
+                                "Blue",
+                                "1.23",
+                                10,
+                                true,
+                                20,
+                                organization
+                        ),
+                        new ConferenceRoom(
+                                "Red",
+                                "2.43",
+                                2,
+                                false,
+                                30,
+                                organization
+                        ))
+        );
+
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/rooms/Google/ASC").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", equalTo("Blue")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name", equalTo("Red")));
+    }
+
+    @Test
+    void when_send_get_request_to_return_all_conference_rooms_booked_by_given_organization_should_be_returned_in_desc_direction() throws Exception {
+        //given
+        Organization organization = organizationRepository.save(new Organization("Google"));
+        conferenceRoomRepository.saveAll(
+                Arrays.asList(new ConferenceRoom(
+                                "Blue",
+                                "1.23",
+                                10,
+                                true,
+                                20,
+                                organization
+                        ),
+                        new ConferenceRoom(
+                                "Red",
+                                "2.43",
+                                2,
+                                false,
+                                30,
+                                organization
+                        ))
+        );
+
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/rooms/Google/DESC").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", equalTo("Red")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name", equalTo("Blue")));
+    }
+
+    @Test
+    void when_send_get_request_to_return_all_available_conference_rooms_should_be_returned_in_asc_direction() throws Exception {
+        //given
+        Organization organization = organizationRepository.save(new Organization("Google"));
+        conferenceRoomRepository.saveAll(
+                Arrays.asList(new ConferenceRoom(
+                                "Blue",
+                                "1.23",
+                                10,
+                                true,
+                                20,
+                                null
+                        ),
+                        new ConferenceRoom(
+                                "Red",
+                                "2.43",
+                                2,
+                                false,
+                                30,
+                                organization
+                        ),
+                        new ConferenceRoom(
+                                "White",
+                                "3.63",
+                                5,
+                                true,
+                                45,
+                                null
+                        ))
+        );
+
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/rooms/ASC").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", equalTo("Blue")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name", equalTo("White")));
+    }
+
+    @Test
+    void when_send_get_request_to_return_all_available_conference_rooms_should_be_returned_in_desc_direction() throws Exception {
+        //given
+        Organization organization = organizationRepository.save(new Organization("Google"));
+        conferenceRoomRepository.saveAll(
+                Arrays.asList(new ConferenceRoom(
+                                "Blue",
+                                "1.23",
+                                10,
+                                true,
+                                20,
+                                null
+                        ),
+                        new ConferenceRoom(
+                                "Red",
+                                "2.43",
+                                2,
+                                false,
+                                30,
+                                organization
+                        ),
+                        new ConferenceRoom(
+                                "White",
+                                "3.63",
+                                5,
+                                true,
+                                45,
+                                null
+                        ))
+        );
+
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/rooms/DESC").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", equalTo("White")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name", equalTo("Blue")));
+    }
+
     @AfterEach
     public void tearDown() {
         conferenceRoomRepository.deleteAll();
