@@ -105,7 +105,7 @@ public class ConferenceRoomService {
         return sortListOfConferenceRooms(filteredConferenceRoomsBySeats, sortType);
     }
 
-    private static List<ConferenceRoom> sortListOfConferenceRooms(List<ConferenceRoom> conferenceRoomsListToSort,
+    List<ConferenceRoom> sortListOfConferenceRooms(List<ConferenceRoom> conferenceRoomsListToSort,
                                                                   SortType sortType) {
         if(sortType == SortType.ASC) {
             return conferenceRoomsListToSort.stream()

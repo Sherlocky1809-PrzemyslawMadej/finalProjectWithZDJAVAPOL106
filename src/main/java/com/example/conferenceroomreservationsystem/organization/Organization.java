@@ -38,11 +38,11 @@ public class Organization {
         this.name = name;
     }
 
-//    public Organization(Long id, String name, List<ConferenceRoom> bookedRooms) {
-//        this.id = id;
-//        this.name = name;
-//        this.bookedRooms = bookedRooms;
-//    }
+    public Organization(Long id, String name, List<ConferenceRoom> bookedRooms) {
+        this.id = id;
+        this.name = name;
+        this.bookedRooms = bookedRooms;
+    }
 
     public String getName() {
         return name;
